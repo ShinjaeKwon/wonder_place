@@ -1,4 +1,4 @@
-package com.wonderplace.entity.type;
+package com.wonderplace.model.type;
 
 public enum UserRole {
 	USER,

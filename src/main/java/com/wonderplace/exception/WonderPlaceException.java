@@ -2,7 +2,7 @@ package com.wonderplace.exception;
 
 public class WonderPlaceException extends RuntimeException {
 
-	private ErrorCode errorCode;
+/*	private ErrorCode errorCode;
 	private String message;
 
 	public WonderPlaceException(ErrorCode errorCode) {
@@ -16,6 +16,6 @@ public class WonderPlaceException extends RuntimeException {
 			return errorCode.getMessage();
 		}
 		return String.format("%s. %s", errorCode.getMessage(), message);
-	}
+	}*/
 
 }

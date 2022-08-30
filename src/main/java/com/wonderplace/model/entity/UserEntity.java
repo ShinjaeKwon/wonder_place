@@ -1,4 +1,4 @@
-package com.wonderplace.entity;
+package com.wonderplace.model.entity;
 
 import java.sql.Timestamp;
 import java.time.Instant;
@@ -17,7 +17,8 @@ import javax.persistence.Table;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
-import com.wonderplace.entity.type.UserRole;
+import com.wonderplace.exception.WonderPlaceException;
+import com.wonderplace.model.type.UserRole;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,9 +29,9 @@ import lombok.ToString;
 @ToString
 @SQLDelete(sql = "UPDATE user SET deleted_at = NOW() where id =?")
 @Where(clause = "deleted_at is NULL")
-@Table
+@Table(name = "user")
 @Entity
-public class User {
+public class UserEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -65,4 +66,15 @@ public class User {
 		this.updatedAt = Timestamp.from(Instant.now());
 	}
 
+	public void checkPassword(String password) {
+		if (!this.password.equals(password)) {
+			throw new WonderPlaceException();
+		}
+	}
+
+	public UserEntity(Long id, String username, String password) {
+		this.id = id;
+		this.username = username;
+		this.password = password;
+	}
 }
