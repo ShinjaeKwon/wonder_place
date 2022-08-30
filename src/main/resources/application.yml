@@ -11,3 +11,20 @@ spring:
     view:
       prefix: /WEB-INF/views/
       suffix: .jsp
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://r98du2bxwqkq3shg.cbetxkdyhwsb.us-east-1.rds.amazonaws.com/huatrdfhfq6etjvr
+    username: rmb09lj9lzqk5opk
+    password: c4xcupwa2nadvf64
+
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: create
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+      use-new-id-generator-mappings: false
+    show-sql: true
+    properties:
+      hibernate.format_sql: true
