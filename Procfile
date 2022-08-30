@@ -1,1 +1,1 @@
-web: java -Dserver.port=$PORT $JAVA_OPTS -jar out/artifacts/wonder_place/*.war
+web: java -Dserver.port=$PORT $JAVA_OPTS -jar build/libs/wonder_place.war

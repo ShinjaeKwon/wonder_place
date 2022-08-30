@@ -12,12 +12,12 @@ spring:
     view:
       prefix: /WEB-INF/views/
       suffix: .jsp
-
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/wonder_place?serverTimezone=Asia/Seoul
-    username: sjk
-    password: sjk
+#
+#  datasource:
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://localhost:3306/wonder_place?serverTimezone=Asia/Seoul
+#    username: sjk
+#    password: sjk
 
   jpa:
     open-in-view: true
