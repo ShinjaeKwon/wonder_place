@@ -17,6 +17,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wonderplace.controller.request.UserJoinRequest;
 import com.wonderplace.controller.request.UserLoginRequest;
+import com.wonderplace.exception.ErrorCode;
 import com.wonderplace.exception.WonderPlaceException;
 import com.wonderplace.model.User;
 import com.wonderplace.service.UserService;
@@ -47,7 +48,7 @@ public class UserControllerTest {
 		//then
 		mock.perform(post("/join")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsBytes(new UserJoinRequest(username, password)))
+				.content(objectMapper.writeValueAsBytes(UserJoinRequest.of(username, password)))
 			).andDo(print())
 			.andExpect(status().isOk());
 
@@ -61,12 +62,13 @@ public class UserControllerTest {
 		String password = "password";
 
 		//when
-		when(userService.join(username, password)).thenThrow(new WonderPlaceException());
+		when(userService.join(username, password)).thenThrow(
+			new WonderPlaceException(ErrorCode.DUPLICATED_USER_NAME, ""));
 
 		//then
 		mock.perform(post("/join")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsBytes(new UserJoinRequest(username, password)))
+				.content(objectMapper.writeValueAsBytes(UserJoinRequest.of(username, password)))
 			).andDo(print())
 			.andExpect(status().isConflict());
 	}
@@ -84,7 +86,7 @@ public class UserControllerTest {
 		//then
 		mock.perform(post("/login")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsBytes(new UserLoginRequest(username, password)))
+				.content(objectMapper.writeValueAsBytes(UserLoginRequest.of(username, password)))
 			).andDo(print())
 			.andExpect(status().isOk());
 	}
@@ -97,12 +99,12 @@ public class UserControllerTest {
 		String password = "password";
 
 		//when
-		when(userService.login(username, password)).thenThrow(new WonderPlaceException());
+		when(userService.login(username, password)).thenThrow(new WonderPlaceException(ErrorCode.USER_NOT_FOUND));
 
 		//then
 		mock.perform(post("/login")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsBytes(new UserLoginRequest(username, password)))
+				.content(objectMapper.writeValueAsBytes(UserLoginRequest.of(username, password)))
 			).andDo(print())
 			.andExpect(status().isNotFound());
 	}
@@ -115,12 +117,12 @@ public class UserControllerTest {
 		String password = "password";
 
 		//when
-		when(userService.login(username, password)).thenThrow(new WonderPlaceException());
+		when(userService.login(username, password)).thenThrow(new WonderPlaceException(ErrorCode.INVALID_PASSWORD));
 
 		//then
 		mock.perform(post("/login")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsBytes(new UserLoginRequest(username, password)))
+				.content(objectMapper.writeValueAsBytes(UserLoginRequest.of(username, password)))
 			).andDo(print())
 			.andExpect(status().isUnauthorized());
 	}

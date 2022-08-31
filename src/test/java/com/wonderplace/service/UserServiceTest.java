@@ -10,7 +10,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import com.wonderplace.exception.ErrorCode;
 import com.wonderplace.exception.WonderPlaceException;
 import com.wonderplace.fixture.UserEntityFixture;
 import com.wonderplace.model.entity.UserEntity;
@@ -25,6 +27,9 @@ public class UserServiceTest {
 	@MockBean
 	private UserEntityRepository userEntityRepository;
 
+	@MockBean
+	private BCryptPasswordEncoder encoder;
+
 	@DisplayName("회원가입이 정상적으로 동작하는 경우")
 	@Test
 	void given_UserInfo_when_Join_then_DoesNotThrow() {
@@ -34,7 +39,8 @@ public class UserServiceTest {
 
 		//when
 		when(userEntityRepository.findByUsername(username)).thenReturn(Optional.empty());
-		when(userEntityRepository.save(any())).thenReturn(Optional.of(UserEntityFixture.get(username, password)));
+		when(encoder.encode(password)).thenReturn("encrypt password");
+		when(userEntityRepository.save(any())).thenReturn(UserEntityFixture.get(username, password));
 
 		//then
 		Assertions.assertDoesNotThrow(() -> userService.join(username, password));
@@ -50,10 +56,13 @@ public class UserServiceTest {
 
 		//when
 		when(userEntityRepository.findByUsername(username)).thenReturn(Optional.of(fixture));
+		when(encoder.encode(password)).thenReturn("encrypt password");
 		when(userEntityRepository.save(any())).thenReturn(Optional.of(fixture));
 
 		//then
-		Assertions.assertThrows(WonderPlaceException.class, () -> userService.join(username, password));
+		WonderPlaceException e = Assertions.assertThrows(WonderPlaceException.class,
+			() -> userService.join(username, password));
+		Assertions.assertEquals(ErrorCode.DUPLICATED_USER_NAME, e.getErrorCode());
 	}
 
 	@DisplayName("로그인이 정상적으로 동작하는 경우")
@@ -67,6 +76,7 @@ public class UserServiceTest {
 
 		//when
 		when(userEntityRepository.findByUsername(username)).thenReturn(Optional.of(fixture));
+		when(encoder.matches(password, fixture.getPassword())).thenReturn(true);
 
 		//then
 		Assertions.assertDoesNotThrow(() -> userService.login(username, password));
@@ -84,7 +94,10 @@ public class UserServiceTest {
 		when(userEntityRepository.save(any())).thenReturn(Optional.of(UserEntity.class));
 
 		//then
-		Assertions.assertThrows(WonderPlaceException.class, () -> userService.login(username, password));
+		WonderPlaceException e = Assertions.assertThrows(WonderPlaceException.class,
+			() -> userService.login(username, password));
+		Assertions.assertEquals(ErrorCode.USER_NOT_FOUND, e.getErrorCode());
+
 	}
 
 	@DisplayName("로그인시 password가 틀린경우")
@@ -101,7 +114,10 @@ public class UserServiceTest {
 		when(userEntityRepository.findByUsername(username)).thenReturn(Optional.of(fixture));
 
 		//then
-		Assertions.assertThrows(WonderPlaceException.class, () -> userService.login(username, wrongPassword));
+		WonderPlaceException e = Assertions.assertThrows(WonderPlaceException.class,
+			() -> userService.login(username, wrongPassword));
+		Assertions.assertEquals(ErrorCode.INVALID_PASSWORD, e.getErrorCode());
+
 	}
 
 }
