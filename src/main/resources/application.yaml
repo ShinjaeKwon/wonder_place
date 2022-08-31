@@ -1,0 +1,35 @@
+server:
+  servlet:
+    context-path: /
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
+spring:
+  mvc:
+    view:
+      prefix: /WEB-INF/views/
+      suffix: .jsp
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://bf1aebfe315983:63d5cd73@us-cdbr-east-06.cleardb.net/heroku_3d75459272c4602
+    username: bf1aebfe315983
+    password: 63d5cd73
+
+  jpa:
+    defer-datasource-initialization: true
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        default_batch_fetch_size: 100
+
+jwt:
+  secret-key: sjk.wonder-place-0.0.1v.secret_key
+  # 30 days
+  token.expired-time-ms: 2592000000
