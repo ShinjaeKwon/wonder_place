@@ -17,7 +17,6 @@ import javax.persistence.Table;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
-import com.wonderplace.exception.WonderPlaceException;
 import com.wonderplace.model.type.UserRole;
 
 import lombok.Getter;
@@ -66,15 +65,23 @@ public class UserEntity {
 		this.updatedAt = Timestamp.from(Instant.now());
 	}
 
-	public void checkPassword(String password) {
-		if (!this.password.equals(password)) {
-			throw new WonderPlaceException();
-		}
+	public static UserEntity of(Long id, String username, String password) {
+		return new UserEntity(id, username, password);
 	}
 
-	public UserEntity(Long id, String username, String password) {
+	public static UserEntity of(String username, String password) {
+		return new UserEntity(username, password);
+	}
+
+	private UserEntity(Long id, String username, String password) {
 		this.id = id;
 		this.username = username;
 		this.password = password;
 	}
+
+	private UserEntity(String username, String password) {
+		this.username = username;
+		this.password = password;
+	}
+
 }
