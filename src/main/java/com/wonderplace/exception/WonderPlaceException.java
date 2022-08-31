@@ -1,8 +1,13 @@
 package com.wonderplace.exception;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@Getter
+@AllArgsConstructor
 public class WonderPlaceException extends RuntimeException {
 
-/*	private ErrorCode errorCode;
+	private ErrorCode errorCode;
 	private String message;
 
 	public WonderPlaceException(ErrorCode errorCode) {
@@ -16,6 +21,6 @@ public class WonderPlaceException extends RuntimeException {
 			return errorCode.getMessage();
 		}
 		return String.format("%s. %s", errorCode.getMessage(), message);
-	}*/
+	}
 
 }
