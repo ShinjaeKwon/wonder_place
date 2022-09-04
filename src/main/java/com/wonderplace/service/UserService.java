@@ -30,6 +30,13 @@ public class UserService {
 	@Value("${jwt.token.expired-time-ms}")
 	private Long expiredTimeMS;
 
+	public User loadUserByUsername(String username) {
+		return userEntityRepository.findByUsername(username).map(User::from)
+			.orElseThrow(
+				() -> new WonderPlaceException(ErrorCode.USER_NOT_FOUND,
+					String.format("\"%s\" not founded", username)));
+	}
+
 	@Transactional
 	public User join(String username, String password) {
 		userEntityRepository.findByUsername(username).ifPresent(it -> {
@@ -54,4 +61,11 @@ public class UserService {
 
 		return JwtTokenUtils.generateToken(username, secretKey, expiredTimeMS);
 	}
+
+	public UserEntity findByUserName(String username) {
+		return userEntityRepository.findByUsername(username)
+			.orElseThrow(() -> new WonderPlaceException(ErrorCode.USER_NOT_FOUND,
+				String.format("\"%s\" not founded", username)));
+	}
+
 }
