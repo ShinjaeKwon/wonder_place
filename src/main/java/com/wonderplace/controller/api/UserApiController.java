@@ -1,4 +1,4 @@
-package com.wonderplace.controller;
+package com.wonderplace.controller.api;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @RestController
-public class UserController {
+public class UserApiController {
 
 	private final UserService userService;
 

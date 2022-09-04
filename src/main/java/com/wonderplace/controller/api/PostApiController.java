@@ -1,4 +1,4 @@
-package com.wonderplace.controller;
+package com.wonderplace.controller.api;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,7 +14,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @RestController
-public class PostController {
+public class PostApiController {
 
 	private final PostService postService;
 
