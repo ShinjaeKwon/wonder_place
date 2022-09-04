@@ -51,7 +51,6 @@ public class UserControllerTest {
 				.content(objectMapper.writeValueAsBytes(UserJoinRequest.of(username, password)))
 			).andDo(print())
 			.andExpect(status().isOk());
-
 	}
 
 	@DisplayName("회원가입시 이미 회원가입이 되어 있는 username인 경우 에러 반환")
